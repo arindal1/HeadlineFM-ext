@@ -1,0 +1,39 @@
+{
+    "manifest_version": 3,
+    "name": "NewsRep",
+    "short_name": "NewsRep",
+    "version": "1.0.0",
+    "description": "Your daily news, narrated with personality. Stay informed, stay entertained.",
+    "permissions": [
+        "storage"
+    ],
+    "host_permissions": [
+        "https://newsapi.org/*",
+        "https://generativelanguage.googleapis.com/*"
+    ],
+    "optional_host_permissions": [
+        "https://*/*"
+    ],
+    "action": {
+        "default_popup": "popup/popup.html",
+        "default_title": "NewsRep — Daily News Narrator",
+        "default_icon": {
+            "16": "assets/icons/icon16.png",
+            "48": "assets/icons/icon48.png",
+            "128": "assets/icons/icon128.png"
+        }
+    },
+    "options_ui": {
+        "page": "options/options.html",
+        "open_in_tab": false
+    },
+    "background": {
+        "service_worker": "background/service-worker.js",
+        "type": "module"
+    },
+    "icons": {
+        "16": "assets/icons/icon16.png",
+        "48": "assets/icons/icon48.png",
+        "128": "assets/icons/icon128.png"
+    }
+}
