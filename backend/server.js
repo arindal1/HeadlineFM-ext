@@ -57,7 +57,7 @@ mongoose
   .then(() => {
     console.log("MongoDB connected");
     app.listen(PORT, () =>
-      console.log(`NewsRep cache server running on port ${PORT}`),
+      console.log(`HeadlineFM cache server running on port ${PORT}`),
     );
   })
   .catch((err) => {

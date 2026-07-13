@@ -69,9 +69,9 @@
                 SHARED CACHE BACKEND URL
                 <span class="optional-tag">OPTIONAL</span>
             </label>
-            <input type="url" id="backendUrl" class="key-input" placeholder="https://your-newsrep-backend.onrender.com"
+            <input type="url" id="backendUrl" class="key-input" placeholder="https://your-backend-cache-server.com"
                 autocomplete="off" spellcheck="false" />
-            <div class="field-hint">Deploy the <code>backend/</code> folder to Render.com (free). Leave blank to use
+            <div class="field-hint">Server is deployed at <code>https://headlinefm.onrender.com</code>. Use it or leave blank to use
                 only local device cache.</div>
         </div>
 
@@ -79,12 +79,12 @@
             <label class="field-label" for="writeSecret">BACKEND WRITE SECRET</label>
             <div class="input-row">
                 <input type="password" id="writeSecret" class="key-input"
-                    placeholder="Optional — matches WRITE_SECRET on your server" autocomplete="off"
+                    placeholder="Optional - matches WRITE_SECRET on your server" autocomplete="off"
                     spellcheck="false" />
                 <button class="toggle-vis-btn" data-target="writeSecret" title="Show/hide"
                     aria-label="Toggle visibility">👁</button>
             </div>
-            <div class="field-hint">Only required if you set WRITE_SECRET on the backend server.</div>
+            <div class="field-hint">Only required if you set WRITE_SECRET on the backend server. Enter <code>headline</code> or leave blank.</div>
         </div>
         </section>
 
