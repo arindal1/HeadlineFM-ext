@@ -1,8 +1,8 @@
 {
     "manifest_version": 3,
-    "name": "NewsRep",
-    "short_name": "NewsRep",
-    "version": "1.0.0",
+    "name": "Headline FM",
+    "short_name": "HLFM",
+    "version": "1.5.1",
     "description": "Your daily news, narrated with personality. Stay informed, stay entertained.",
     "permissions": [
         "storage"
@@ -16,7 +16,7 @@
     ],
     "action": {
         "default_popup": "popup/popup.html",
-        "default_title": "NewsRep — Daily News Narrator",
+        "default_title": "Headline FM - Daily News Narrator",
         "default_icon": {
             "16": "assets/icons/icon16.png",
             "48": "assets/icons/icon48.png",
@@ -28,7 +28,7 @@
         "open_in_tab": false
     },
     "background": {
-        "service_worker": "background/service-worker.js",
+        "service_worker": "background/service_worker.js",
         "type": "module"
     },
     "icons": {
