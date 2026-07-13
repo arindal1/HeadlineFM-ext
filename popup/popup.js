@@ -3,11 +3,11 @@
  * Orchestrates: settings · category selection · news fetch · AI narration · TTS playback
  */
 
-import { CATEGORIES, fetchAllNews, formatNewsForPrompt } from "../utils/news-service.js";
-import { generateNarration, PERSONAS } from "../utils/gemini-service.js";
-import { TTSService } from "../utils/tts-service.js";
-import { cacheGet, cacheSet, buildCacheKey, cachePurge } from "../utils/cache-service.js";
-import { buildCategoriesKey, fetchSharedNarration, storeSharedNarration } from "../utils/shared-cache-api.js";
+import { CATEGORIES, fetchAllNews, formatNewsForPrompt } from "../utils/news_service.js";
+import { generateNarration, PERSONAS } from "../utils/gemini_service.js";
+import { TTSService } from "../utils/tts_service.js";
+import { cacheGet, cacheSet, buildCacheKey, cachePurge } from "../utils/cache_service.js";
+import { buildCategoriesKey, fetchSharedNarration, storeSharedNarration } from "../utils/shared_cache_api.js";
 
 /* - Singleton TTS instance - */
 const tts = new TTSService();
