@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Headline FM | Settings</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="options.css" />
+</head>
+
+<body>
+
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <div class="container">
+
+        <header class="header">
+            <div class="logo">
+                <span>📡</span>
+                <span class="logo-text">HEADLINE <span class="accent">FM</span></span>
+            </div>
+            <div class="logo-sub">SYSTEM CONFIGURATION</div>
+        </header>
+
+        <!-- - API Keys - -->
+        <section class="card" aria-labelledby="apiTitle">
+            <div class="card-title" id="apiTitle">▸ API KEYS</div>
+            <div class="card-desc">
+                Both services offer free tiers — no credit card required.
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="newsApiKey">
+                    NEWS API KEY
+                    <a href="https://newsapi.org/register" target="_blank" rel="noopener" class="get-key-link">→ Get
+                        free key</a>
+                </label>
+                <div class="input-row">
+                    <input type="password" id="newsApiKey" class="key-input" placeholder="Enter your NewsAPI.org key"
+                        autocomplete="off" spellcheck="false" />
+                    <button class="toggle-vis-btn" data-target="newsApiKey" title="Show/hide key"
+                        aria-label="Toggle visibility">👁</button>
+                </div>
+                <div class="field-hint">Free tier: 100 requests/day · newsapi.org/register</div>
+            </div>
+
+            <div class="field-group">
+                <label class="field-label" for="geminiApiKey">
+                    GOOGLE GEMINI API KEY
+                    <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
+                        class="get-key-link">→ Get free key</a>
+                </label>
+                <div class="input-row">
+                    <input type="password" id="geminiApiKey" class="key-input" placeholder="Enter your Gemini API key"
+                        autocomplete="off" spellcheck="false" />
+                    <button class="toggle-vis-btn" data-target="geminiApiKey" title="Show/hide key"
+                        aria-label="Toggle visibility">👁</button>
+                </div>
+                <div class="field-hint">Free tier: 15 req/min · 1M tokens/day · aistudio.google.com</div>
+            </div>
+        </section>
+
+        <!-- Backend URL -->
+        <div class="field-group">
+            <label class="field-label" for="backendUrl">
+                SHARED CACHE BACKEND URL
+                <span class="optional-tag">OPTIONAL</span>
+            </label>
+            <input type="url" id="backendUrl" class="key-input" placeholder="https://your-newsrep-backend.onrender.com"
+                autocomplete="off" spellcheck="false" />
+            <div class="field-hint">Deploy the <code>backend/</code> folder to Render.com (free). Leave blank to use
+                only local device cache.</div>
+        </div>
+
+        <div class="field-group" id="writeSecretGroup" style="display:none">
+            <label class="field-label" for="writeSecret">BACKEND WRITE SECRET</label>
+            <div class="input-row">
+                <input type="password" id="writeSecret" class="key-input"
+                    placeholder="Optional — matches WRITE_SECRET on your server" autocomplete="off"
+                    spellcheck="false" />
+                <button class="toggle-vis-btn" data-target="writeSecret" title="Show/hide"
+                    aria-label="Toggle visibility">👁</button>
+            </div>
+            <div class="field-hint">Only required if you set WRITE_SECRET on the backend server.</div>
+        </div>
+        </section>
+
+        <div class="actions">
+            <button class="save-btn" id="saveBtn">💾 SAVE SETTINGS</button>
+        </div>
+
+        <div class="msg-box" id="msgBox" style="display:none" role="alert">
+            <span id="msgText"></span>
+        </div>
+
+        <!-- - Info - -->
+        <section class="card info-card" aria-labelledby="infoTitle">
+            <div class="card-title" id="infoTitle">▸ HOW IT WORKS</div>
+            <ol class="how-list">
+                <li>Select news categories in the popup.</li>
+                <li>Click <strong>BROADCAST</strong> — 3-tier cache check: local → shared backend → live Gemini call.
+                </li>
+                <li>The <strong>first user</strong> of the day triggers a Gemini narration. Everyone after gets it
+                    instantly from cache.</li>
+                <li>Google Gemini rewrites headlines into a fun, punchy narration script.</li>
+                <li>The script is read aloud using your browser's built-in speech engine.</li>
+                <li>Results are cached locally per day — no wasted API calls on repeat opens.</li>
+            </ol>
+        </section>
+
+        <footer class="footer">
+            NewsRep v1.5.1 &nbsp;·&nbsp; Free APIs only &nbsp;·&nbsp; Data stays on your device
+        </footer>
+
+    </div>
+
+    <script src="options.js" type="module"></script>
+</body>
+
+</html>
