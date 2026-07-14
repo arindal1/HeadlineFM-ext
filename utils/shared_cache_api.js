@@ -65,7 +65,7 @@ export async function storeSharedNarration(
 
   const today = new Date().toISOString().slice(0, 10);
   const headers = { "Content-Type": "application/json" };
-  if (writeSecret) headers["X-HeadlineFM-Secret"] = writeSecret;
+  if (writeSecret) headers["x-headline-secret"] = writeSecret;
 
   try {
     await fetch(`${backendUrl}/api/narration`, {

@@ -115,11 +115,11 @@ router.get("/", readLimiter, async (req, res) => {
      gender        'female' | 'male'
      narration     string — the full Gemini narration text
    Headers:
-     X-NewsRep-Secret  (if WRITE_SECRET env var is set)
+    x-headline-secret  (if WRITE_SECRET env var is set)
 -------------------------------------------------------------------------- */
 router.post("/", writeLimiter, async (req, res) => {
   const secret = process.env.WRITE_SECRET;
-  if (secret && req.headers["x-newsrep-secret"] !== secret) {
+  if (secret && req.headers["x-headline-secret"] !== secret) {
     return res.status(403).json({ error: "Forbidden." });
   }
 

@@ -81,7 +81,7 @@ RULES (strictly follow these):
 6. **Conversational tone** - write for the ear, not the eye. Short sentences, natural rhythm.
 7. **Inject personality** - relevant jokes, one-liners, meme references, pop culture callbacks in YOUR style.
 8. **Sign off memorably** - in your voice, something that feels true to your character.
-9. Aim for 500-700 words total.
+9. Aim for 500-700 words total, max 1000 words. Try to cover all the stories.
 
 Begin the narration now:`;
 }
@@ -107,7 +107,7 @@ export async function generateNarration(newsText, apiKey, gender = "female") {
     generationConfig: {
       temperature: 0.88,
       topP: 0.92,
-      maxOutputTokens: 1024,
+      maxOutputTokens: 3072,
     },
     safetySettings: [
       {

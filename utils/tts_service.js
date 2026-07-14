@@ -12,7 +12,7 @@
  */
 
 const GEMINI_TTS_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent";
 
 const PCM_SAMPLE_RATE = 24_000; // Hz
 
