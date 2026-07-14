@@ -15,9 +15,9 @@ export function todayKey() {
  * Derive a unique cache key from the date + sorted category list + gender.
  * Gender is included because male/female narrations are distinct (different personas).
  */
-export function buildCacheKey(prefix, categories, gender = '') {
-  const cats   = [...categories].sort().join(',');
-  const suffix = gender ? `_${gender}` : '';
+export function buildCacheKey(prefix, categories, gender = "") {
+  const cats = [...categories].sort().join(",");
+  const suffix = gender ? `_${gender}` : "";
   return `${prefix}_${todayKey()}_${cats}${suffix}`;
 }
 
@@ -51,6 +51,6 @@ export async function cacheRemove(key) {
 /** Purge all NewsRep cache entries (leaves settings untouched) */
 export async function cachePurge() {
   const all = await chrome.storage.local.get(null);
-  const toRemove = Object.keys(all).filter(k => k.startsWith('nr_'));
+  const toRemove = Object.keys(all).filter((k) => k.startsWith("nr_"));
   if (toRemove.length) await chrome.storage.local.remove(toRemove);
 }

@@ -13,9 +13,9 @@ A shared backend (Node.js + MongoDB Atlas) means **only one Gemini call is made 
 | | |
 |---|---|
 | 📰 **10 categories** | Technology ★, Science, Business, Entertainment, General, Football, F1, UFC, Politics, Finance |
-| 🤖 **AI narration** | Gemini 1.5 Flash rewrites dry headlines into an entertaining broadcast |
-| � **Anchor personas** | **Maya** (female) - sharp, warm, culturally-aware. **Zane** (male) - smooth, deadpan, dry wit. Two distinct scripts per day |
-| 🎙️ **Smooth voice** | Choose Male / Female + any available browser voice (Google/Microsoft neural voices preferred) |
+| 🤖 **AI narration** | Gemini 2.5 Flash rewrites dry headlines into an entertaining broadcast |
+| 🎙️ **Natural AI voice** | Gemini TTS API — Aoede (female, warm & breezy) · Charon (male, deep & firm) |
+| 🎭 **Anchor personas** | **Maya** (female) - sharp, warm, culturally-aware. **Zane** (male) - smooth, deadpan, dry wit. Two distinct scripts per day |
 | 💾 **3-tier daily cache** | Local → shared backend → live call. One Gemini call **per gender per day** for all users |
 | 🎨 **Retro UI** | CRT scanlines, neon glow, VT323 terminal font, animated audio visualizer |
 | 🆓 **100% free stack** | NewsAPI + Gemini + MongoDB Atlas M0 + Render.com |
@@ -36,7 +36,7 @@ HeadlineFM/
 ├── utils/                           # Shared pure-logic modules
 │   ├── news-service.js              # Fetches headlines from NewsAPI.org
 │   ├── gemini-service.js            # Calls Gemini 1.5 Flash for narration
-│   ├── tts-service.js               # Web Speech API wrapper (chunked + keep-alive)
+│   ├── tts-service.js               # Gemini TTS API client + Web Audio API playback
 │   ├── cache-service.js             # Local daily cache via chrome.storage.local
 │   └── shared-cache-api.js          # Client for the shared backend cache
 │
@@ -87,7 +87,7 @@ User clicks BROADCAST
                   │
              Write to BOTH local cache + shared backend (fire-and-forget)
                   │
-             display + play via Web Speech API
+             display + play via Gemini TTS API → Web Audio
 ```
 
 The **first female user** of the day generates Maya's narration. The **first male user** generates Zane's. Everyone after that gets theirs instantly from cache - max 2 Gemini calls per day total, only when actually needed.
@@ -132,7 +132,7 @@ Short version: deploy `backend/` to [Render.com](https://render.com) (free), con
 
 1. Click the 📡 **Headline FM** toolbar icon
 2. Toggle the **category chips** you want (TECH is pre-selected ★)
-3. Choose **♀ FEMALE** or **♂ MALE** anchor voice, and optionally pick a specific voice
+3. Choose **♀ FEMALE** (Maya · Aoede voice) or **♂ MALE** (Zane · Charon voice)
 4. Hit **📻 BROADCAST TODAY'S NEWS**
 5. Keep the popup open while listening - Chrome stops audio when the popup closes
 
@@ -152,15 +152,16 @@ Short version: deploy `backend/` to [Render.com](https://render.com) (free), con
 - Standard categories (`/top-headlines`): Technology, Science, Business, Entertainment, General.
 - Custom queries (`/everything?q=`): Football, F1, UFC, Politics, Finance.
 
-**Gemini 1.5 Flash**
+**Gemini 2.5 Flash**
 - Free tier: 15 requests/minute, 1 million tokens/day.
 - Temperature 0.88 → creative but coherent narration.
 - Prompt instructs: late-night-host energy, Gen-Z slang, meme references, short punchy sentences.
 
-**Web Speech API**
-- Fully local - synthesizes in the browser, zero HTTP calls, no cost.
-- Voice quality by OS: Windows (Microsoft Jenny/Aria - excellent), macOS (Samantha - good), Chrome (Google US English - excellent, requires internet).
-- TTS is intentionally NOT cached in the shared backend - it runs locally per user and preserves individual voice preferences.
+**Gemini TTS**
+- Uses `gemini-2.5-flash-preview-tts` model — same API key as narration, no extra setup.
+- Returns raw 16-bit PCM audio (24 kHz, mono), decoded and played via Web Audio API.
+- Fixed voices for broadcast consistency: **Aoede** (female — warm, breezy) · **Charon** (male — deep, firm).
+- No browser voice quality variation — sounds identical on every OS.
 
 ---
 
@@ -173,9 +174,8 @@ Short version: deploy `backend/` to [Render.com](https://render.com) (free), con
 | *Gemini key invalid* | Must start with `AIza` |
 | *Shared cache - permission prompt appeared* | Click **Allow** when Chrome asks for permission after saving the backend URL |
 | *Shared cache - still not working* | Backend URL must start with `https://`; verify the Render service is live at `/health` |
-| *Audio stops after ~15 s* | Known Chrome bug - keep-alive timer handles it. If it still stops, click ▶ |
+| *Audio stops after ~15 s* | Web Speech API bug — replaced with Gemini TTS + Web Audio API which has no cutoff |
 | *Audio stops when popup closes* | Chrome limitation - keep popup open while listening |
-| *No voices in dropdown* | Voices load async; click ▶ Play once to trigger load |
 | *Icons missing / grey puzzle piece* | Run `generate-icons.html` and place the 3 PNGs in `assets/icons/` |
 
 ---
@@ -183,4 +183,3 @@ Short version: deploy `backend/` to [Render.com](https://render.com) (free), con
 ## License
 
 MIT - free to use and modify for personal projects. Not for commercial distribution.
-

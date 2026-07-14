@@ -1,5 +1,5 @@
 /**
- * options.js — HeadlineFM Settings Page
+ * options.js - HeadlineFM Settings Page
  * Handles API key storage and display.
  */
 
@@ -38,13 +38,13 @@ async function saveKeys() {
   // Basic format validation
   if (newsKey && !/^[a-f0-9]{32}$/i.test(newsKey)) {
     showMsg(
-      "NewsAPI key looks invalid — it should be a 32-character hex string.",
+      "NewsAPI key looks invalid - it should be a 32-character hex string.",
       "error",
     );
     return;
   }
   if (geminiKey && !geminiKey.startsWith("AIza")) {
-    showMsg('Gemini key looks invalid — it should start with "AIza".', "error");
+    showMsg('Gemini key looks invalid - it should start with "AIza".', "error");
     return;
   }
   if (backendUrl && !backendUrl.startsWith("https://")) {
@@ -62,7 +62,7 @@ async function saveKeys() {
       });
       if (!granted) {
         showMsg(
-          "Permission for the backend URL was denied — shared cache will not work. You can try again.",
+          "Permission for the backend URL was denied - shared cache will not work. You can try again.",
           "error",
         );
         return;
@@ -91,7 +91,12 @@ function bindEvents() {
     btn.addEventListener("click", () => {
       const targetId = btn.dataset.target;
       const input = $(targetId);
-      input.type = input.type === "password" ? "text" : "password";
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      const showIcon = btn.querySelector(".eye-show");
+      const hideIcon = btn.querySelector(".eye-hide");
+      if (showIcon) showIcon.style.display = isPassword ? "none" : "";
+      if (hideIcon) hideIcon.style.display = isPassword ? "" : "none";
     });
   });
 

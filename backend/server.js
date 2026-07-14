@@ -1,5 +1,5 @@
 /**
- * server.js — HeadlineFM shared narration cache API
+ * server.js - HeadlineFM shared narration cache API
  *
  * Endpoints:
  *   GET  /api/narration?date=YYYY-MM-DD&cats=tech,science,...&gender=female

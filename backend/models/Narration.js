@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 /**
  * Narration cache document.
@@ -12,36 +12,36 @@ const narrationSchema = new mongoose.Schema(
   {
     // "YYYY-MM-DD"  (UTC)
     date: {
-      type:     String,
+      type: String,
       required: true,
-      match:    /^\d{4}-\d{2}-\d{2}$/,
+      match: /^\d{4}-\d{2}-\d{2}$/,
     },
     // Sorted, comma-joined category IDs, e.g. "business,science,technology"
     categoriesKey: {
-      type:     String,
+      type: String,
       required: true,
-      trim:     true,
+      trim: true,
     },
     // The Gemini-generated narration script
     narration: {
-      type:     String,
+      type: String,
       required: true,
     },
-    // Soft metadata — not used for logic, useful for debugging
+    // Soft metadata - not used for logic, useful for debugging
     categoryCount: {
       type: Number,
     },
   },
   {
     timestamps: true, // adds createdAt + updatedAt
-  }
+  },
 );
 
-// Compound unique index — one cache entry per (date, category combination)
+// Compound unique index - one cache entry per (date, category combination)
 narrationSchema.index({ date: 1, categoriesKey: 1 }, { unique: true });
 
 // TTL index: auto-delete documents older than 48 h
 // (keeps Atlas M0 clean; 1 extra day grace period in case of timezone differences)
 narrationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 172_800 }); // 48 h
 
-module.exports = mongoose.model('Narration', narrationSchema);
+module.exports = mongoose.model("Narration", narrationSchema);

@@ -4,115 +4,169 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Headline FM | Settings</title>
+    <title>Headline FM - Settings</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="options.css" />
 </head>
 
 <body>
-
-    <div class="scanlines" aria-hidden="true"></div>
-
     <div class="container">
 
+        <!-- Header -->
         <header class="header">
             <div class="logo">
-                <span>📡</span>
-                <span class="logo-text">HEADLINE <span class="accent">FM</span></span>
+                <div class="logo-mark" aria-hidden="true">
+                    <div class="logo-dot"></div>
+                    <div class="logo-ring"></div>
+                </div>
+                <span class="logo-text">Headline<span class="logo-accent">FM</span></span>
             </div>
-            <div class="logo-sub">SYSTEM CONFIGURATION</div>
+            <div class="header-sub">Settings</div>
         </header>
 
-        <!-- - API Keys - -->
+        <!-- API Keys -->
         <section class="card" aria-labelledby="apiTitle">
-            <div class="card-title" id="apiTitle">▸ API KEYS</div>
-            <div class="card-desc">
-                Both services offer free tiers — no credit card required.
+            <div class="card-header">
+                <div class="card-title" id="apiTitle">API Keys</div>
+                <div class="card-desc">Both services offer free tiers - no credit card required.</div>
             </div>
 
             <div class="field-group">
                 <label class="field-label" for="newsApiKey">
-                    NEWS API KEY
-                    <a href="https://newsapi.org/register" target="_blank" rel="noopener" class="get-key-link">→ Get
-                        free key</a>
+                    <span>NewsAPI Key</span>
+                    <a href="https://newsapi.org/register" target="_blank" rel="noopener" class="get-key-link">Get free
+                        key ↗</a>
                 </label>
                 <div class="input-row">
-                    <input type="password" id="newsApiKey" class="key-input" placeholder="Enter your NewsAPI.org key"
+                    <input type="password" id="newsApiKey" class="key-input" placeholder="Your NewsAPI.org key"
                         autocomplete="off" spellcheck="false" />
-                    <button class="toggle-vis-btn" data-target="newsApiKey" title="Show/hide key"
-                        aria-label="Toggle visibility">👁</button>
+                    <button type="button" class="toggle-vis-btn" data-target="newsApiKey" title="Show / hide"
+                        aria-label="Toggle key visibility">
+                        <svg class="eye-icon eye-show" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <svg class="eye-icon eye-hide" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="display:none">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
                 </div>
-                <div class="field-hint">Free tier: 100 requests/day · newsapi.org/register</div>
+                <div class="field-hint">Free tier: 100 req/day · newsapi.org</div>
             </div>
 
             <div class="field-group">
                 <label class="field-label" for="geminiApiKey">
-                    GOOGLE GEMINI API KEY
+                    <span>Google Gemini Key</span>
                     <a href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener"
-                        class="get-key-link">→ Get free key</a>
+                        class="get-key-link">Get free key ↗</a>
                 </label>
                 <div class="input-row">
-                    <input type="password" id="geminiApiKey" class="key-input" placeholder="Enter your Gemini API key"
-                        autocomplete="off" spellcheck="false" />
-                    <button class="toggle-vis-btn" data-target="geminiApiKey" title="Show/hide key"
-                        aria-label="Toggle visibility">👁</button>
+                    <input type="password" id="geminiApiKey" class="key-input"
+                        placeholder="Your Gemini API key (starts with AIza)" autocomplete="off" spellcheck="false" />
+                    <button type="button" class="toggle-vis-btn" data-target="geminiApiKey" title="Show / hide"
+                        aria-label="Toggle key visibility">
+                        <svg class="eye-icon eye-show" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <svg class="eye-icon eye-hide" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="display:none">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
                 </div>
                 <div class="field-hint">Free tier: 15 req/min · 1M tokens/day · aistudio.google.com</div>
             </div>
         </section>
 
-        <!-- Backend URL -->
-        <div class="field-group">
-            <label class="field-label" for="backendUrl">
-                SHARED CACHE BACKEND URL
-                <span class="optional-tag">OPTIONAL</span>
-            </label>
-            <input type="url" id="backendUrl" class="key-input" placeholder="https://your-backend-cache-server.com"
-                autocomplete="off" spellcheck="false" />
-            <div class="field-hint">Server is deployed at <code>https://headlinefm.onrender.com</code>. Use it or leave blank to use
-                only local device cache.</div>
-        </div>
-
-        <div class="field-group" id="writeSecretGroup" style="display:none">
-            <label class="field-label" for="writeSecret">BACKEND WRITE SECRET</label>
-            <div class="input-row">
-                <input type="password" id="writeSecret" class="key-input"
-                    placeholder="Optional - matches WRITE_SECRET on your server" autocomplete="off"
-                    spellcheck="false" />
-                <button class="toggle-vis-btn" data-target="writeSecret" title="Show/hide"
-                    aria-label="Toggle visibility">👁</button>
+        <!-- Shared Cache Backend -->
+        <section class="card" aria-labelledby="cacheTitle">
+            <div class="card-header">
+                <div class="card-title" id="cacheTitle">
+                    Shared Cache
+                    <span class="optional-badge">Optional</span>
+                </div>
+                <div class="card-desc">Reduces Gemini API calls by sharing today's narration across users.</div>
             </div>
-            <div class="field-hint">Only required if you set WRITE_SECRET on the backend server. Enter <code>headline</code> or leave blank.</div>
-        </div>
+
+            <div class="field-group">
+                <label class="field-label" for="backendUrl">
+                    <span>Backend URL</span>
+                </label>
+                <input type="url" id="backendUrl" class="key-input" placeholder="https://your-backend-cache-server.com"
+                    autocomplete="off" spellcheck="false" />
+                <div class="field-hint">Try <code>https://headlinefm.onrender.com</code> or leave blank for local-only
+                    cache.</div>
+            </div>
+
+            <div class="field-group" id="writeSecretGroup" style="display:none">
+                <label class="field-label" for="writeSecret">
+                    <span>Write Secret</span>
+                </label>
+                <div class="input-row">
+                    <input type="password" id="writeSecret" class="key-input"
+                        placeholder="Matches WRITE_SECRET on your server" autocomplete="off" spellcheck="false" />
+                    <button type="button" class="toggle-vis-btn" data-target="writeSecret" title="Show / hide"
+                        aria-label="Toggle visibility">
+                        <svg class="eye-icon eye-show" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <svg class="eye-icon eye-hide" width="15" height="15" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            style="display:none">
+                            <path
+                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                            <line x1="1" y1="1" x2="23" y2="23" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="field-hint">Only needed if you set WRITE_SECRET on the backend. Enter <code>headline</code>
+                    or leave blank.</div>
+            </div>
         </section>
 
+        <!-- Actions -->
         <div class="actions">
-            <button class="save-btn" id="saveBtn">💾 SAVE SETTINGS</button>
+            <button type="button" class="save-btn" id="saveBtn">Save Settings</button>
         </div>
 
         <div class="msg-box" id="msgBox" style="display:none" role="alert">
             <span id="msgText"></span>
         </div>
 
-        <!-- - Info - -->
+        <!-- How It Works -->
         <section class="card info-card" aria-labelledby="infoTitle">
-            <div class="card-title" id="infoTitle">▸ HOW IT WORKS</div>
+            <div class="card-header">
+                <div class="card-title" id="infoTitle">How it works</div>
+            </div>
             <ol class="how-list">
-                <li>Select news categories in the popup.</li>
-                <li>Click <strong>BROADCAST</strong> — 3-tier cache check: local → shared backend → live Gemini call.
+                <li>Select topics in the popup and tap <strong>Broadcast</strong>.</li>
+                <li>HeadlineFM checks 3 caches: local → shared backend → live Gemini call.</li>
+                <li>The first user of the day triggers the AI narration - everyone else gets it instantly from cache.
                 </li>
-                <li>The <strong>first user</strong> of the day triggers a Gemini narration. Everyone after gets it
-                    instantly from cache.</li>
-                <li>Google Gemini rewrites headlines into a fun, punchy narration script.</li>
-                <li>The script is read aloud using your browser's built-in speech engine.</li>
-                <li>Results are cached locally per day — no wasted API calls on repeat opens.</li>
+                <li>Google Gemini 2.5 Flash rewrites headlines into a fun, punchy script.</li>
+                <li>The script is read aloud via the Gemini TTS API using fixed voices (Aoede / Charon).</li>
+                <li>Results expire after 24 hours - fresh content every day.</li>
             </ol>
         </section>
 
         <footer class="footer">
-            NewsRep v1.5.1 &nbsp;·&nbsp; Free APIs only &nbsp;·&nbsp; Data stays on your device
+            HeadlineFM v2.0.1 &nbsp;&middot;&nbsp; Free APIs only &nbsp;&middot;&nbsp; Data stays on your device
         </footer>
 
     </div>

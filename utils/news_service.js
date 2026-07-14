@@ -113,7 +113,7 @@ export async function fetchCategory(cat, apiKey) {
   const data = await resp.json();
   if (data.status !== "ok") throw new Error(data.message || "NewsAPI error");
 
-  // Normalise articles — keep only the fields we need
+  // Normalise articles - keep only the fields we need
   const articles = (data.articles || [])
     .filter((a) => a.title && a.title !== "[Removed]")
     .slice(0, PAGE_SIZE)
@@ -150,7 +150,7 @@ export function formatNewsForPrompt(settledResults) {
     if (!articles.length) continue;
 
     const lines = articles.map((a) => {
-      const desc = a.description ? ` — ${a.description.slice(0, 120)}` : "";
+      const desc = a.description ? ` - ${a.description.slice(0, 120)}` : "";
       return `  • ${a.title}${desc}`;
     });
     sections.push(`[${category}]\n${lines.join("\n")}`);

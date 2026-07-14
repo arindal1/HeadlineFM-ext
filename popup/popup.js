@@ -1,13 +1,26 @@
 /**
- * popup.js — Headline FM main popup controller
+ * popup.js - Headline FM main popup controller
  * Orchestrates: settings · category selection · news fetch · AI narration · TTS playback
  */
 
-import { CATEGORIES, fetchAllNews, formatNewsForPrompt } from "../utils/news_service.js";
+import {
+  CATEGORIES,
+  fetchAllNews,
+  formatNewsForPrompt,
+} from "../utils/news_service.js";
 import { generateNarration, PERSONAS } from "../utils/gemini_service.js";
 import { TTSService } from "../utils/tts_service.js";
-import { cacheGet, cacheSet, buildCacheKey, cachePurge } from "../utils/cache_service.js";
-import { buildCategoriesKey, fetchSharedNarration, storeSharedNarration } from "../utils/shared_cache_api.js";
+import {
+  cacheGet,
+  cacheSet,
+  buildCacheKey,
+  cachePurge,
+} from "../utils/cache_service.js";
+import {
+  buildCategoriesKey,
+  fetchSharedNarration,
+  storeSharedNarration,
+} from "../utils/shared_cache_api.js";
 
 /* - Singleton TTS instance - */
 const tts = new TTSService();
@@ -16,14 +29,14 @@ const tts = new TTSService();
 const state = {
   selectedCategories: new Set(["technology"]),
   voiceGender: "female",
-  selectedVoiceName: null, // user-picked specific voice (optional)
+  selectedVoiceName: null, // kept for saved-settings backward compat, unused
   narration: "",
   isLoading: false,
   isPlaying: false,
   isPaused: false,
   backendUrl: "", // shared cache backend URL
   writeSecret: "", // optional backend write secret
-  // API keys loaded once at init — avoids storage round-trip on every broadcast
+  // API keys loaded once at init - avoids storage round-trip on every broadcast
   newsApiKey: "",
   geminiApiKey: "",
 };
@@ -38,8 +51,8 @@ const el = {
   categoriesGrid: $("categoriesGrid"),
   voiceFemale: $("voiceFemale"),
   voiceMale: $("voiceMale"),
-  voiceSelect: $("voiceSelect"),
   visualizer: $("visualizer"),
+  playerCard: $("playerCard"),
   narrationBox: $("narrationBox"),
   narrationIdle: $("narrationIdle"),
   narrationBody: $("narrationBody"),
@@ -64,27 +77,23 @@ async function init() {
   setDate();
   await loadSettings();
   renderCategories();
-  populateVoices();
   renderPersonaBadge(state.voiceGender);
   bindEvents();
 }
 
 function setDate() {
   const now = new Date();
-  el.dateBadge.textContent = now
-    .toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    })
-    .toUpperCase();
+  el.dateBadge.textContent = now.toLocaleDateString("en-GB", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 async function loadSettings() {
   const data = await chrome.storage.sync.get([
     "selectedCategories",
     "voiceGender",
-    "voiceName",
     "backendUrl",
     "writeSecret",
     "newsApiKey",
@@ -95,7 +104,6 @@ async function loadSettings() {
     state.selectedCategories = new Set(data.selectedCategories);
   }
   if (data.voiceGender) state.voiceGender = data.voiceGender;
-  if (data.voiceName) state.selectedVoiceName = data.voiceName;
   if (data.backendUrl) state.backendUrl = data.backendUrl.replace(/\/$/, "");
   if (data.writeSecret) state.writeSecret = data.writeSecret;
   if (data.newsApiKey) state.newsApiKey = data.newsApiKey;
@@ -108,7 +116,7 @@ async function loadSettings() {
   el.voiceMale.setAttribute("aria-checked", state.voiceGender === "male");
 }
 
-/* Debounced settings writer — coalesces rapid storage writes (e.g. quick category toggling). */
+/* Debounced settings writer - coalesces rapid storage writes (e.g. quick category toggling). */
 let _saveTimer = null;
 async function saveSettings() {
   clearTimeout(_saveTimer);
@@ -116,7 +124,6 @@ async function saveSettings() {
     chrome.storage.sync.set({
       selectedCategories: [...state.selectedCategories],
       voiceGender: state.voiceGender,
-      voiceName: state.selectedVoiceName || "",
     });
   }, 400);
 }
@@ -152,51 +159,11 @@ function toggleCategory(id, btn) {
   saveSettings();
 }
 
-/* VOICE SELECTION */
-function populateVoices() {
-  const doPopulate = () => {
-    const voices = tts.getVoices(state.voiceGender);
-    el.voiceSelect.innerHTML = "";
-
-    if (!voices.length) {
-      const opt = document.createElement("option");
-      opt.textContent = "System default";
-      el.voiceSelect.appendChild(opt);
-      return;
-    }
-
-    for (const v of voices) {
-      const opt = document.createElement("option");
-      opt.value = v.name;
-      opt.textContent = v.name
-        .replace("Microsoft ", "")
-        .replace(" Online (Natural)", "");
-      if (v.name === state.selectedVoiceName) opt.selected = true;
-      el.voiceSelect.appendChild(opt);
-    }
-  };
-
-  // Voices may not be ready yet on first call
-  if (speechSynthesis.getVoices().length) {
-    doPopulate();
-  } else {
-    speechSynthesis.addEventListener("voiceschanged", doPopulate, {
-      once: true,
-    });
-  }
-}
-
 /* EVENT BINDINGS */
 function bindEvents() {
   // Voice gender toggle
   el.voiceFemale.addEventListener("click", () => setGender("female"));
   el.voiceMale.addEventListener("click", () => setGender("male"));
-
-  // Specific voice dropdown
-  el.voiceSelect.addEventListener("change", () => {
-    state.selectedVoiceName = el.voiceSelect.value || null;
-    saveSettings();
-  });
 
   // Settings page
   el.settingsBtn.addEventListener("click", () =>
@@ -222,11 +189,12 @@ function bindEvents() {
   tts.onStart = () => {
     state.isPlaying = true;
     state.isPaused = false;
-    setStatus("playing", "ON AIR");
+    setStatus("playing", "On air");
     showOnAir(true);
     setVisualizer(true);
     setPlayerControls(true);
     el.narrationBox.classList.add("active");
+    el.playerCard.classList.add("active-playing");
   };
 
   tts.onProgress = (charIdx, total) => {
@@ -239,9 +207,10 @@ function bindEvents() {
   tts.onEnd = () => {
     state.isPlaying = false;
     state.isPaused = false;
-    setStatus("ready", "BROADCAST COMPLETE");
+    setStatus("ready", "Broadcast complete");
     showOnAir(false);
     setVisualizer(false);
+    el.playerCard.classList.remove("active-playing");
     el.progressFill.style.width = "100%";
     el.progressPct.textContent = "100%";
     setPlayIcon("play");
@@ -250,9 +219,10 @@ function bindEvents() {
   tts.onError = (err) => {
     state.isPlaying = false;
     showMessage(`TTS error: ${err}`, "error");
-    setStatus("error", "TTS ERROR");
+    setStatus("error", "TTS error");
     showOnAir(false);
     setVisualizer(false);
+    el.playerCard.classList.remove("active-playing");
   };
 }
 
@@ -262,7 +232,6 @@ function setGender(gender) {
   el.voiceMale.classList.toggle("active", gender === "male");
   el.voiceFemale.setAttribute("aria-checked", gender === "female");
   el.voiceMale.setAttribute("aria-checked", gender === "male");
-  populateVoices();
   renderPersonaBadge(gender);
   saveSettings();
 }
@@ -304,9 +273,10 @@ function handleStop() {
   tts.stop();
   state.isPlaying = false;
   state.isPaused = false;
-  setStatus("ready", "READY TO BROADCAST");
+  setStatus("ready", "Ready to broadcast");
   showOnAir(false);
   setVisualizer(false);
+  el.playerCard.classList.remove("active-playing");
   setPlayIcon("play");
   el.progressFill.style.width = "0%";
   el.progressPct.textContent = "0%";
@@ -336,7 +306,7 @@ async function broadcast(forceRefresh = false) {
   hideMessage();
   tts.stop();
 
-  // API keys live in state (loaded once at init) — no storage round-trip needed.
+  // API keys live in state (loaded once at init) - no storage round-trip needed.
   if (!state.newsApiKey || !state.geminiApiKey) {
     showMessage(
       '⚙ API keys not set. <a href="#" id="goSettings">Open Settings</a> to add your free NewsAPI and Gemini keys.',
@@ -370,7 +340,7 @@ async function broadcast(forceRefresh = false) {
 
   // - Tier 2: Shared backend cache (per-gender, one Gemini call/day)
   if (!forceRefresh && state.backendUrl) {
-    setLoading(true, "CHECKING CACHE...");
+    setLoading(true, "Checking cache...");
     const sharedHit = await fetchSharedNarration(
       state.backendUrl,
       catsKey,
@@ -387,7 +357,7 @@ async function broadcast(forceRefresh = false) {
   }
 
   // - Tier 3: Fetch live news + call Gemini
-  setLoading(true, "FETCHING NEWS...");
+  setLoading(true, "Fetching news...");
 
   let settledNews;
   try {
@@ -412,8 +382,8 @@ async function broadcast(forceRefresh = false) {
 
   const newsText = formatNewsForPrompt(settledNews);
   const anchorName = PERSONAS[gender]?.name || "AI";
-  setStatus("loading", `${anchorName.toUpperCase()} IS WRITING...`);
-  setBroadcastLabel(`${anchorName.toUpperCase()} IS ON IT...`);
+  setStatus("loading", `${anchorName} is writing...`);
+  setBroadcastLabel(`${anchorName} is on it...`);
 
   let narration;
   try {
@@ -440,7 +410,7 @@ async function broadcast(forceRefresh = false) {
   if (successCount < categories.length) {
     const failed = settledNews.filter((r) => r.status === "rejected").length;
     showMessage(
-      `${failed} categor${failed === 1 ? "y" : "ies"} failed to load — broadcast continues with available news.`,
+      `${failed} categor${failed === 1 ? "y" : "ies"} failed to load - broadcast continues with available news.`,
       "info",
     );
   }
@@ -478,25 +448,15 @@ function updateNarrationProgress(charIdx, total) {
 
 /* TTS PLAYBACK */
 function playNarration(text) {
-  // Resolve user-selected specific voice (if any) and hand it to TTSService
-  // via setOverrideVoice() — no monkey-patching of internal methods.
-  if (state.selectedVoiceName) {
-    const picked = speechSynthesis
-      .getVoices()
-      .find((v) => v.name === state.selectedVoiceName);
-    tts.setOverrideVoice(picked || null);
-  } else {
-    tts.setOverrideVoice(null); // let TTSService auto-pick best voice for gender
-  }
-  tts.speak(text, state.voiceGender);
+  tts.speak(text, state.voiceGender, state.geminiApiKey);
 }
 
 /* UI HELPERS */
-function setLoading(on, label = "BROADCASTING...") {
+function setLoading(on, label = "Broadcasting...") {
   state.isLoading = on;
   el.broadcastBtn.disabled = on;
   el.broadcastBtn.classList.toggle("loading", on);
-  setBroadcastLabel(on ? label : "BROADCAST TODAY'S NEWS");
+  setBroadcastLabel(on ? label : "Broadcast Today's News");
   if (on) setStatus("loading", label);
 }
 
@@ -548,7 +508,7 @@ function hideMessage() {
   el.msgBox.classList.remove("slide-in");
 }
 
-/* VISUALIZER — generate bars */
+/* VISUALIZER - generate bars */
 function buildVisualizer() {
   el.visualizer.innerHTML = "";
   for (let i = 0; i < 24; i++) {

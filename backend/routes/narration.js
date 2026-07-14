@@ -1,6 +1,6 @@
-const express    = require('express');
-const rateLimit  = require('express-rate-limit');
-const Narration  = require('../models/Narration');
+const express = require("express");
+const rateLimit = require("express-rate-limit");
+const Narration = require("../models/Narration");
 
 const router = express.Router();
 
@@ -8,20 +8,20 @@ const router = express.Router();
 
 // GET is cheap (DB read) — allow frequent polling
 const readLimiter = rateLimit({
-  windowMs:        60_000,  // 1 minute
-  max:             30,
+  windowMs: 60_000, // 1 minute
+  max: 30,
   standardHeaders: true,
-  legacyHeaders:   false,
-  message:         { error: 'Too many requests, slow down.' },
+  legacyHeaders: false,
+  message: { error: "Too many requests, slow down." },
 });
 
 // POST triggers a Gemini call from the client — limit tightly
 const writeLimiter = rateLimit({
-  windowMs:        60_000,  // 1 minute
-  max:             5,
+  windowMs: 60_000, // 1 minute
+  max: 5,
   standardHeaders: true,
-  legacyHeaders:   false,
-  message:         { error: 'Write rate limit exceeded.' },
+  legacyHeaders: false,
+  message: { error: "Write rate limit exceeded." },
 });
 
 /* -- Helpers ---------------------------------------------------------------- */
@@ -31,19 +31,19 @@ const writeLimiter = rateLimit({
  * Gender is NOT part of this key — it is handled separately.
  */
 function normaliseCatsKey(rawCats) {
-  if (!rawCats || typeof rawCats !== 'string') return null;
+  if (!rawCats || typeof rawCats !== "string") return null;
   const cats = rawCats
-    .split(',')
-    .map(c => c.trim().toLowerCase())
+    .split(",")
+    .map((c) => c.trim().toLowerCase())
     .filter(Boolean);
   if (cats.length === 0 || cats.length > 10) return null;
   cats.sort();
-  return cats.join(',');
+  return cats.join(",");
 }
 
 /** Validate gender string — defaults to 'female' for unknown values. */
 function normaliseGender(raw) {
-  return raw === 'male' ? 'male' : 'female';
+  return raw === "male" ? "male" : "female";
 }
 
 /**
@@ -69,34 +69,42 @@ function todayUTC() {
    Response 404: { error: 'not_cached' }
    Response 400: bad params
 -------------------------------------------------------------------------- */
-router.get('/', readLimiter, async (req, res) => {
+router.get("/", readLimiter, async (req, res) => {
   const date = req.query.date || todayUTC();
   if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    return res.status(400).json({ error: 'Invalid date format. Use YYYY-MM-DD.' });
+    return res
+      .status(400)
+      .json({ error: "Invalid date format. Use YYYY-MM-DD." });
   }
 
   const catsKey = normaliseCatsKey(req.query.cats);
   if (!catsKey) {
-    return res.status(400).json({ error: 'cats param is required (comma-separated category IDs, max 10).' });
+    return res
+      .status(400)
+      .json({
+        error: "cats param is required (comma-separated category IDs, max 10).",
+      });
   }
 
-  const gender       = normaliseGender(req.query.gender);
+  const gender = normaliseGender(req.query.gender);
   const categoriesKey = buildCacheKey(catsKey, gender);
 
   try {
-    const doc = await Narration.findOne({ date, categoriesKey }).select('narration createdAt').lean();
-    if (!doc) return res.status(404).json({ error: 'not_cached' });
+    const doc = await Narration.findOne({ date, categoriesKey })
+      .select("narration createdAt")
+      .lean();
+    if (!doc) return res.status(404).json({ error: "not_cached" });
 
     return res.json({
-      narration:    doc.narration,
+      narration: doc.narration,
       date,
       categoriesKey,
       gender,
-      cachedAt:     doc.createdAt,
+      cachedAt: doc.createdAt,
     });
   } catch (err) {
-    console.error('[GET /narration]', err.message);
-    return res.status(500).json({ error: 'Database error.' });
+    console.error("[GET /narration]", err.message);
+    return res.status(500).json({ error: "Database error." });
   }
 });
 
@@ -109,35 +117,43 @@ router.get('/', readLimiter, async (req, res) => {
    Headers:
      X-NewsRep-Secret  (if WRITE_SECRET env var is set)
 -------------------------------------------------------------------------- */
-router.post('/', writeLimiter, async (req, res) => {
+router.post("/", writeLimiter, async (req, res) => {
   const secret = process.env.WRITE_SECRET;
-  if (secret && req.headers['x-newsrep-secret'] !== secret) {
-    return res.status(403).json({ error: 'Forbidden.' });
+  if (secret && req.headers["x-newsrep-secret"] !== secret) {
+    return res.status(403).json({ error: "Forbidden." });
   }
 
   const { date, categories, gender: rawGender, narration } = req.body;
 
   if (!date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
-    return res.status(400).json({ error: 'date must be YYYY-MM-DD.' });
+    return res.status(400).json({ error: "date must be YYYY-MM-DD." });
   }
 
   const catsKey = normaliseCatsKey(categories);
   if (!catsKey) {
-    return res.status(400).json({ error: 'categories is required (comma-separated, max 10).' });
+    return res
+      .status(400)
+      .json({ error: "categories is required (comma-separated, max 10)." });
   }
 
-  if (!narration || typeof narration !== 'string' || narration.trim().length < 50) {
-    return res.status(400).json({ error: 'narration must be a non-empty string.' });
+  if (
+    !narration ||
+    typeof narration !== "string" ||
+    narration.trim().length < 50
+  ) {
+    return res
+      .status(400)
+      .json({ error: "narration must be a non-empty string." });
   }
 
-  if (Buffer.byteLength(narration, 'utf8') > 20_480) {
-    return res.status(400).json({ error: 'narration payload too large.' });
+  if (Buffer.byteLength(narration, "utf8") > 20_480) {
+    return res.status(400).json({ error: "narration payload too large." });
   }
 
-  const gender        = normaliseGender(rawGender);
+  const gender = normaliseGender(rawGender);
   const categoriesKey = buildCacheKey(catsKey, gender);
   // categoryCount derived from the categories key, not the composite key
-  const categoryCount = catsKey.split(',').length;
+  const categoryCount = catsKey.split(",").length;
 
   try {
     await Narration.findOneAndUpdate(
@@ -148,15 +164,15 @@ router.post('/', writeLimiter, async (req, res) => {
           categoryCount,
         },
       },
-      { upsert: true, new: false }
+      { upsert: true, new: false },
     );
     return res.status(201).json({ ok: true, date, categoriesKey });
   } catch (err) {
     if (err.code === 11000) {
-      return res.status(200).json({ ok: true, note: 'already_cached' });
+      return res.status(200).json({ ok: true, note: "already_cached" });
     }
-    console.error('[POST /narration]', err.message);
-    return res.status(500).json({ error: 'Database error.' });
+    console.error("[POST /narration]", err.message);
+    return res.status(500).json({ error: "Database error." });
   }
 });
 

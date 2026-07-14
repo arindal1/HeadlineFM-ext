@@ -7,25 +7,29 @@
     <title>Headline FM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet" />
     <link rel="stylesheet" href="popup.css" />
 </head>
 
 <body>
-    <!-- CRT Scanlines overlay -->
-    <div class="scanlines" aria-live="polite"></div>
     <div class="container">
-        <!--  Header  -->
+
+        <!-- Header -->
         <header class="header">
             <div class="logo">
-                <span class="logo-signal" aria-live="polite">📡</span>
-                <span class="logo-text">Headline <span class="accent">FM</span></span>
+                <div class="logo-mark" aria-hidden="true">
+                    <div class="logo-dot"></div>
+                    <div class="logo-ring"></div>
+                </div>
+                <span class="logo-text">Headline<span class="logo-accent">FM</span></span>
             </div>
-            <div class="header-meta">
+            <div class="header-right">
                 <span class="date-badge" id="dateBadge">-- --- ----</span>
-                <button type="button" class="icon-btn" id="settingsBtn" title="Settings">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
-                        stroke-linecap="round" stroke-linejoin="round" aria-live="polite">
+                <button type="button" class="icon-btn" id="settingsBtn" title="Settings" aria-label="Settings">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3" />
                         <path
                             d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
@@ -34,49 +38,43 @@
             </div>
         </header>
 
-        <!--  Status Bar  -->
-        <div class="status-bar">
+        <!-- Status -->
+        <div class="status-pill">
             <span class="status-dot" id="statusDot"></span>
-            <span class="status-text" id="statusText">READY TO BROADCAST</span>
-            <span class="on-air" id="onAirBadge" aria-live="polite">ON AIR</span>
+            <span class="status-text" id="statusText">Ready to broadcast</span>
+            <span class="on-air" id="onAirBadge" aria-live="polite">LIVE</span>
         </div>
 
-        <!--  Category Selection  -->
-        <section class="section" aria-labelledby="freqLabel">
-            <div class="section-label" id="freqLabel">▸ BROADCAST FREQUENCIES</div>
+        <!-- Topics -->
+        <section class="section" aria-labelledby="topicsLabel">
+            <div class="section-label" id="topicsLabel">Topics</div>
             <div class="categories-grid" id="categoriesGrid" role="group" aria-label="News categories">
                 <!-- Populated by popup.js -->
             </div>
         </section>
 
-        <!--  Voice Selection  -->
-        <section class="section" aria-labelledby="voiceLabel">
-            <div class="section-label" id="voiceLabel">▸ ANCHOR VOICE</div>
-            <div class="voice-row">
-                <div class="voice-toggle" role="radiogroup" aria-label="Voice gender">
-                    <button type="button"class="voice-btn active" id="voiceFemale" data-gender="female" role="radio"
-                        aria-checked="true">
-                        <span class="v-icon">♀</span> FEMALE
-                    </button>
-                    <button type="button"class="voice-btn" id="voiceMale" data-gender="male" role="radio" aria-checked="false">
-                        <span class="v-icon">♂</span> MALE
-                    </button>
-                </div>
-                <select class="voice-select" id="voiceSelect" aria-label="Select voice"></select>
+        <!-- Anchor Voice -->
+        <section class="section" aria-labelledby="anchorLabel">
+            <div class="section-label" id="anchorLabel">Anchor</div>
+            <div class="voice-segment" role="radiogroup" aria-label="Voice gender">
+                <button type="button" class="voice-btn active" id="voiceFemale" data-gender="female" role="radio"
+                    aria-checked="true">Female</button>
+                <button type="button" class="voice-btn" id="voiceMale" data-gender="male" role="radio"
+                    aria-checked="false">Male</button>
             </div>
-            <!-- Anchor persona badge — updated by popup.js when gender changes -->
             <div class="persona-badge" id="personaBadge" aria-live="polite"></div>
         </section>
 
+        <!-- Player -->
         <div class="player-card" id="playerCard">
-            <div class="visualizer" id="visualizer" aria-live="polite">
-            </div>
+            <div class="visualizer" id="visualizer" aria-label="Audio visualizer" aria-hidden="true"></div>
+
             <div class="narration-box" id="narrationBox" role="log" aria-live="polite" aria-label="Narration text">
                 <div class="narration-idle" id="narrationIdle">
-                    Select your frequencies and hit <strong>BROADCAST</strong> to tune in...
+                    Choose your topics and tap <strong>Broadcast</strong> to start.
                 </div>
                 <div class="narration-body" id="narrationBody" style="display:none">
-                    <span class="spoken" id="spokenText"></span><span class="cursor">|</span><span class="unspoken"
+                    <span class="spoken" id="spokenText"></span><span class="cursor"></span><span class="unspoken"
                         id="unspokenText"></span>
                 </div>
             </div>
@@ -90,39 +88,41 @@
 
             <!-- Playback Controls -->
             <div class="controls-row">
-                <button type="button"class="ctrl-btn" id="restartBtn" title="Restart from beginning" disabled aria-label="Restart">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-live="polite">
+                <button type="button" class="ctrl-btn" id="restartBtn" title="Restart" disabled aria-label="Restart">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
                     </svg>
                 </button>
-                <button type="button"class="ctrl-btn play-btn" id="playPauseBtn" title="Play / Pause" disabled aria-label="Play">
-                    <svg class="icon-play" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                        aria-live="polite">
+                <button type="button" class="ctrl-btn play-btn" id="playPauseBtn" title="Play / Pause" disabled
+                    aria-label="Play">
+                    <svg class="icon-play" width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8 5v14l11-7z" />
                     </svg>
-                    <svg class="icon-pause" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"
-                        style="display:none" aria-live="polite">
+                    <svg class="icon-pause" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"
+                        style="display:none">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                     </svg>
                 </button>
-                <button type="button"class="ctrl-btn" id="stopBtn" title="Stop" disabled aria-label="Stop">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-live="polite">
-                        <rect x="6" y="6" width="12" height="12" />
+                <button type="button" class="ctrl-btn" id="stopBtn" title="Stop" disabled aria-label="Stop">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                        <rect x="6" y="6" width="12" height="12" rx="2" />
                     </svg>
                 </button>
             </div>
-
         </div>
 
-        <!--  Broadcast button type="button" -->
-        <button type="button"class="broadcast-btn" id="broadcastBtn">
-            <span class="bc-icon">📻</span>
-            <span class="bc-label" id="broadcastLabel">BROADCAST TODAY'S NEWS</span>
+        <!-- Broadcast Button -->
+        <button type="button" class="broadcast-btn" id="broadcastBtn">
+            <span class="bc-dot" aria-hidden="true"></span>
+            <span class="bc-label" id="broadcastLabel">Broadcast Today's News</span>
         </button>
-        <div class="bc-hint">Keep popup open while listening &nbsp;·&nbsp; <a href="#" id="refreshLink">↺ force
-                refresh</a></div>
 
-        <!--  Messages  -->
+        <div class="bc-hint">
+            Keep popup open while listening &nbsp;&middot;&nbsp;
+            <a href="#" id="refreshLink">&#8635; Force refresh</a>
+        </div>
+
+        <!-- Messages -->
         <div class="msg-box" id="msgBox" style="display:none" role="alert">
             <span id="msgText"></span>
         </div>
@@ -130,4 +130,5 @@
     </div>
     <script type="module" src="popup.js"></script>
 </body>
+
 </html>
