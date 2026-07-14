@@ -17,7 +17,7 @@ const GEMINI_TTS_URL =
 const PCM_SAMPLE_RATE = 24_000; // Hz
 
 /** Max chars per API call. A 700-word broadcast ≈ 4 200 chars, well under Gemini's 8 k-token limit. */
-const CHUNK_SIZE = 4_000;
+const CHUNK_SIZE = 900;
 
 /**
  * Fixed broadcast voices - chosen for quality and consistency.
