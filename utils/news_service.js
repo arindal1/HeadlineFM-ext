@@ -104,7 +104,7 @@ export async function fetchCategory(cat, apiKey) {
     url = `${BASE_EVERYTHING}?q=${encodeURIComponent(cat.param)}&language=en&sortBy=publishedAt&pageSize=${PAGE_SIZE}&from=${today}&apiKey=${apiKey}`;
   }
 
-  const resp = await fetch(url);
+  const resp = await fetch(url, { signal: AbortSignal.timeout(10_000) });
   if (!resp.ok) {
     const err = await resp.json().catch(() => ({}));
     throw new Error(err.message || `HTTP ${resp.status}`);

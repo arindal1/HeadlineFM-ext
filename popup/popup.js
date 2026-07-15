@@ -1,26 +1,13 @@
 /**
- * popup.js - Headline FM main popup controller
+ * popup.js — Headline FM main popup controller
  * Orchestrates: settings · category selection · news fetch · AI narration · TTS playback
  */
 
-import {
-  CATEGORIES,
-  fetchAllNews,
-  formatNewsForPrompt,
-} from "../utils/news_service.js";
+import { CATEGORIES, fetchAllNews, formatNewsForPrompt } from "../utils/news_service.js";
 import { generateNarration, PERSONAS } from "../utils/gemini_service.js";
 import { TTSService } from "../utils/tts_service.js";
-import {
-  cacheGet,
-  cacheSet,
-  buildCacheKey,
-  cachePurge,
-} from "../utils/cache_service.js";
-import {
-  buildCategoriesKey,
-  fetchSharedNarration,
-  storeSharedNarration,
-} from "../utils/shared_cache_api.js";
+import { cacheGet, cacheSet, buildCacheKey, cachePurge } from "../utils/cache_service.js";
+import { buildCategoriesKey, fetchSharedNarration, storeSharedNarration } from "../utils/shared_cache_api.js";
 
 /* - Singleton TTS instance - */
 const tts = new TTSService();
@@ -36,7 +23,7 @@ const state = {
   isPaused: false,
   backendUrl: "", // shared cache backend URL
   writeSecret: "", // optional backend write secret
-  // API keys loaded once at init - avoids storage round-trip on every broadcast
+  // API keys loaded once at init — avoids storage round-trip on every broadcast
   newsApiKey: "",
   geminiApiKey: "",
 };
@@ -116,7 +103,7 @@ async function loadSettings() {
   el.voiceMale.setAttribute("aria-checked", state.voiceGender === "male");
 }
 
-/* Debounced settings writer - coalesces rapid storage writes (e.g. quick category toggling). */
+/* Debounced settings writer — coalesces rapid storage writes (e.g. quick category toggling). */
 let _saveTimer = null;
 async function saveSettings() {
   clearTimeout(_saveTimer);
@@ -303,10 +290,22 @@ function handleRestart() {
 async function broadcast(forceRefresh = false) {
   if (state.isLoading) return;
 
+  try {
+    await _broadcastImpl(forceRefresh);
+  } catch (err) {
+    // Safety net: ensures the button is never stuck disabled after an unexpected throw
+    setLoading(false);
+    showMessage(`Unexpected error: ${err.message}`, "error");
+    setStatus("error", "ERROR");
+  }
+}
+
+async function _broadcastImpl(forceRefresh = false) {
+
   hideMessage();
   tts.stop();
 
-  // API keys live in state (loaded once at init) - no storage round-trip needed.
+  // API keys live in state (loaded once at init) — no storage round-trip needed.
   if (!state.newsApiKey || !state.geminiApiKey) {
     showMessage(
       '⚙ API keys not set. <a href="#" id="goSettings">Open Settings</a> to add your free NewsAPI and Gemini keys.',
@@ -410,7 +409,7 @@ async function broadcast(forceRefresh = false) {
   if (successCount < categories.length) {
     const failed = settledNews.filter((r) => r.status === "rejected").length;
     showMessage(
-      `${failed} categor${failed === 1 ? "y" : "ies"} failed to load - broadcast continues with available news.`,
+      `${failed} categor${failed === 1 ? "y" : "ies"} failed to load — broadcast continues with available news.`,
       "info",
     );
   }
@@ -508,7 +507,7 @@ function hideMessage() {
   el.msgBox.classList.remove("slide-in");
 }
 
-/* VISUALIZER - generate bars */
+/* VISUALIZER — generate bars */
 function buildVisualizer() {
   el.visualizer.innerHTML = "";
   for (let i = 0; i < 24; i++) {

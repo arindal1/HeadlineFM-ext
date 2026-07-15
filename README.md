@@ -35,7 +35,7 @@ HeadlineFM/
 │
 ├── utils/                           # Shared pure-logic modules
 │   ├── news-service.js              # Fetches headlines from NewsAPI.org
-│   ├── gemini-service.js            # Calls Gemini 1.5 Flash for narration
+│   ├── gemini-service.js            # Calls Gemini 2.5 Flash for narration
 │   ├── tts-service.js               # Gemini TTS API client + Web Audio API playback
 │   ├── cache-service.js             # Local daily cache via chrome.storage.local
 │   └── shared-cache-api.js          # Client for the shared backend cache
@@ -83,7 +83,7 @@ User clicks BROADCAST
         ▼ ── Tier 3 ──────────────────────────────────────────────────────
              NewsAPI.org  (parallel fetch across selected categories)
                   │
-             Gemini 1.5 Flash  (generates narration as Maya or Zane)
+             Gemini 2.5 Flash  (generates narration as Maya or Zane)
                   │
              Write to BOTH local cache + shared backend (fire-and-forget)
                   │

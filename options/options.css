@@ -1,70 +1,61 @@
 /*
-  HeadlineFM - Options Page Stylesheet
+  HeadlineFM — Options Page Stylesheet
+  Design language: Apple × Nothing — clean, minimal, modern
 */
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap');
 
+/* ═══════════════════════════════
+   Design Tokens
+═══════════════════════════════ */
 :root {
-    --bg: #090909;
-    --surface-1: #101010;
-    --surface-2: #181818;
-    --surface-3: #202020;
-    --surface-4: #2c2c2c;
+    --bg:         #090909;
+    --surface-1:  #101010;
+    --surface-2:  #181818;
+    --surface-3:  #202020;
+    --surface-4:  #2c2c2c;
 
-    --border: rgba(255, 255, 255, 0.065);
-    --border-md: rgba(255, 255, 255, 0.11);
-    --border-hi: rgba(255, 255, 255, 0.22);
+    --border:     rgba(255, 255, 255, 0.065);
+    --border-md:  rgba(255, 255, 255, 0.11);
+    --border-hi:  rgba(255, 255, 255, 0.22);
 
-    --text: #f0f0f0;
-    --text-2: #636363;
-    --text-3: #313131;
+    --text:       #f0f0f0;
+    --text-2:     #636363;
+    --text-3:     #313131;
 
-    --amber: #FF9F0A;
-    --amber-dim: rgba(255, 159, 10, 0.10);
+    --amber:        #FF9F0A;
+    --amber-dim:    rgba(255, 159, 10, 0.10);
     --amber-border: rgba(255, 159, 10, 0.28);
 
-    --green: #32D74B;
-    --red: #FF453A;
-    --blue: #0A84FF;
+    --green:  #32D74B;
+    --red:    #FF453A;
+    --blue:   #0A84FF;
 
     --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-mono: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+    --font-body:    'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-mono:    'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
 
-    --r-xs: 6px;
-    --r-sm: 10px;
-    --r-md: 14px;
-    --r-lg: 18px;
+    --r-xs:   6px;
+    --r-sm:   10px;
+    --r-md:   14px;
+    --r-lg:   18px;
 
-    --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out:    cubic-bezier(0.16, 1, 0.3, 1);
     --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-    --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-std:    cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-*,
-*::before,
-*::after {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+/* ═══════════════════════════════
+   Reset
+═══════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+button { cursor: pointer; font-family: var(--font-body); border: none; background: none; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { text-decoration: underline; }
 
-button {
-    cursor: pointer;
-    font-family: var(--font-body);
-    border: none;
-    background: none;
-}
-
-a {
-    color: var(--blue);
-    text-decoration: none;
-}
-
-a:hover {
-    text-decoration: underline;
-}
-
+/* ═══════════════════════════════
+   Base
+═══════════════════════════════ */
 body {
     min-width: 480px;
     max-width: 580px;
@@ -82,12 +73,15 @@ body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background-image: radial-gradient(circle, rgba(255, 255, 255, 0.020) 1px, transparent 1px);
+    background-image: radial-gradient(circle, rgba(255,255,255,0.020) 1px, transparent 1px);
     background-size: 22px 22px;
     pointer-events: none;
     z-index: 0;
 }
 
+/* ═══════════════════════════════
+   Container
+═══════════════════════════════ */
 .container {
     padding: 22px 24px;
     display: flex;
@@ -97,6 +91,9 @@ body::before {
     z-index: 1;
 }
 
+/* ═══════════════════════════════
+   Header
+═══════════════════════════════ */
 .header {
     display: flex;
     align-items: center;
@@ -126,7 +123,7 @@ body::before {
     height: 7px;
     border-radius: 50%;
     background: var(--amber);
-    box-shadow: 0 0 8px var(--amber), 0 0 18px rgba(255, 159, 10, 0.25);
+    box-shadow: 0 0 8px var(--amber), 0 0 18px rgba(255,159,10,0.25);
     animation: logo-dot-breathe 3s ease-in-out infinite;
     position: relative;
     z-index: 2;
@@ -136,7 +133,7 @@ body::before {
     position: absolute;
     inset: 0;
     border-radius: 50%;
-    border: 1.5px solid rgba(255, 159, 10, 0.20);
+    border: 1.5px solid rgba(255,159,10,0.20);
     animation: logo-ring-pulse 3s ease-in-out infinite;
 }
 
@@ -148,9 +145,7 @@ body::before {
     color: var(--text);
 }
 
-.logo-accent {
-    color: var(--amber);
-}
+.logo-accent { color: var(--amber); }
 
 .header-sub {
     font-size: 11px;
@@ -159,6 +154,9 @@ body::before {
     letter-spacing: 0.2px;
 }
 
+/* ═══════════════════════════════
+   Card
+═══════════════════════════════ */
 .card {
     background: var(--surface-1);
     border: 1px solid var(--border);
@@ -204,6 +202,9 @@ body::before {
     padding: 2px 8px;
 }
 
+/* ═══════════════════════════════
+   Form Fields
+═══════════════════════════════ */
 .field-group {
     display: flex;
     flex-direction: column;
@@ -230,11 +231,7 @@ body::before {
     text-transform: none;
     transition: opacity 150ms var(--ease-std);
 }
-
-.get-key-link:hover {
-    opacity: 0.75;
-    text-decoration: none;
-}
+.get-key-link:hover { opacity: 0.75; text-decoration: none; }
 
 .input-row {
     display: flex;
@@ -255,21 +252,18 @@ body::before {
     letter-spacing: 0.1px;
     transition:
         border-color 200ms var(--ease-std),
-        box-shadow 200ms var(--ease-std),
-        background 200ms var(--ease-std);
+        box-shadow   200ms var(--ease-std),
+        background   200ms var(--ease-std);
 }
-
 .key-input:hover {
     border-color: var(--border-md);
     background: var(--surface-3);
 }
-
 .key-input:focus {
-    border-color: rgba(255, 159, 10, 0.35);
-    box-shadow: 0 0 0 3px rgba(255, 159, 10, 0.08);
+    border-color: rgba(255,159,10,0.35);
+    box-shadow: 0 0 0 3px rgba(255,159,10,0.08);
     background: var(--surface-2);
 }
-
 .key-input::placeholder {
     color: var(--text-3);
     font-size: 12.5px;
@@ -287,22 +281,18 @@ body::before {
     justify-content: center;
     flex-shrink: 0;
     transition:
-        background 150ms var(--ease-std),
+        background   150ms var(--ease-std),
         border-color 150ms var(--ease-std),
-        color 150ms var(--ease-std),
-        transform 200ms var(--ease-spring);
+        color        150ms var(--ease-std),
+        transform    200ms var(--ease-spring);
 }
-
 .toggle-vis-btn:hover {
     background: var(--surface-3);
     border-color: var(--border-md);
     color: var(--text);
     transform: scale(1.06);
 }
-
-.toggle-vis-btn:active {
-    transform: scale(0.94);
-}
+.toggle-vis-btn:active { transform: scale(0.94); }
 
 .field-hint {
     font-size: 11px;
@@ -319,6 +309,9 @@ body::before {
     border-radius: 4px;
 }
 
+/* ═══════════════════════════════
+   Actions
+═══════════════════════════════ */
 .actions {
     display: flex;
     justify-content: stretch;
@@ -338,39 +331,38 @@ body::before {
     position: relative;
     overflow: hidden;
     transition:
-        background 200ms var(--ease-std),
+        background   200ms var(--ease-std),
         border-color 200ms var(--ease-std),
-        box-shadow 200ms var(--ease-std),
-        transform 250ms var(--ease-spring);
+        box-shadow   200ms var(--ease-std),
+        transform    250ms var(--ease-spring);
 }
 
 .save-btn::after {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.04) 50%, transparent 100%);
+    background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.04) 50%, transparent 100%);
     opacity: 0;
     transition: opacity 300ms var(--ease-std);
     pointer-events: none;
 }
-
-.save-btn:hover::after {
-    opacity: 1;
-}
+.save-btn:hover::after { opacity: 1; }
 
 .save-btn:hover {
     background: linear-gradient(180deg, var(--surface-3) 0%, var(--surface-2) 100%);
-    border-color: rgba(255, 159, 10, 0.20);
-    box-shadow: 0 6px 22px rgba(0, 0, 0, 0.32), 0 0 0 1px rgba(255, 159, 10, 0.07);
+    border-color: rgba(255,159,10,0.20);
+    box-shadow: 0 6px 22px rgba(0,0,0,0.32), 0 0 0 1px rgba(255,159,10,0.07);
     transform: translateY(-1px);
 }
-
 .save-btn:active {
     transform: translateY(0) scale(0.99);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
     transition-duration: 70ms;
 }
 
+/* ═══════════════════════════════
+   Message Box
+═══════════════════════════════ */
 .msg-box {
     padding: 11px 16px;
     border-radius: var(--r-sm);
@@ -385,14 +377,16 @@ body::before {
     border: 1px solid rgba(50, 215, 75, 0.22);
     color: #32D74B;
 }
-
 .msg-box.error {
     background: rgba(255, 69, 58, 0.08);
     border: 1px solid rgba(255, 69, 58, 0.22);
     color: #FF6B6B;
 }
 
-.info-card {}
+/* ═══════════════════════════════
+   Info Card
+═══════════════════════════════ */
+.info-card { }
 
 .how-list {
     padding-left: 18px;
@@ -414,6 +408,9 @@ body::before {
     font-weight: 600;
 }
 
+/* ═══════════════════════════════
+   Footer
+═══════════════════════════════ */
 .footer {
     text-align: center;
     font-size: 11px;
@@ -422,45 +419,19 @@ body::before {
     padding-top: 4px;
 }
 
+/* ═══════════════════════════════
+   Keyframes
+═══════════════════════════════ */
 @keyframes logo-dot-breathe {
-
-    0%,
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-
-    50% {
-        transform: scale(1.22);
-        opacity: 0.75;
-    }
+    0%, 100% { transform: scale(1);    opacity: 1; }
+    50%       { transform: scale(1.22); opacity: 0.75; }
 }
-
 @keyframes logo-ring-pulse {
-    0% {
-        transform: scale(0.85);
-        opacity: 0.4;
-    }
-
-    55% {
-        transform: scale(1.5);
-        opacity: 0;
-    }
-
-    100% {
-        transform: scale(0.85);
-        opacity: 0;
-    }
+    0%   { transform: scale(0.85); opacity: 0.4; }
+    55%  { transform: scale(1.5);  opacity: 0; }
+    100% { transform: scale(0.85); opacity: 0; }
 }
-
 @keyframes msg-appear {
-    from {
-        opacity: 0;
-        transform: translateY(-4px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
 }

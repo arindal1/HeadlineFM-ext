@@ -208,20 +208,22 @@ The `TTSService` calls the Gemini TTS API and plays the result through Web Audio
 
 ```mermaid
 flowchart TD
-    A[Full narration string\n~500–700 words] --> B{Length > 4 000 chars?}
-    B -->|No — typical| C[Single Gemini TTS call\nvoice = Aoede or Charon]
-    B -->|Yes — rare| D[Split at paragraph boundaries\ninto ≤4 000-char chunks]
-    D --> C
-    C --> E[Gemini returns base64 raw PCM\n16-bit LE · 24 kHz · mono]
+    A[Full narration string\n~500–700 words] --> B[Split on paragraph boundaries\n\n\n]
+    B --> C[Each paragraph = one TTS chunk\nOversize paragraph → sentence split ≤3 500 chars]
+    C --> D[Fetch chunk 0 from Gemini TTS\nvoice = Aoede or Charon]
+    D --> E[Gemini returns base64 raw PCM\n16-bit LE · 24 kHz · mono]
     E --> F[_decodePCM\nbase64 → float32 AudioBuffer]
-    F --> G[AudioContext.createBufferSource\n.start 00]
+    F --> G[AudioContext.createBufferSource\n.start 0]
     G --> H[setInterval 100 ms\nonProgress callback]
+    G --> P[Pre-fetch next chunk in parallel]
     H --> I{Last chunk?}
-    I -->|No — next chunk pre-fetched| G
+    I -->|No — next chunk ready| G
     I -->|Yes| J[TTSService.onEnd callback]
 ```
 
-Pipelining: while chunk N is playing, chunk N+1 is already being fetched from Gemini TTS in parallel, so there is no audible gap between segments.
+Pipelining: while chunk N is playing, chunk N+1 is already being fetched from Gemini TTS in parallel, so there is no audible gap between paragraphs.
+
+Chunking strategy: `_chunkText()` always splits on `\n\n` paragraph boundaries first. Each paragraph becomes its own TTS call. Any paragraph longer than 3 500 chars is further split at sentence endings. This means even a short narration is chunked by paragraph — the user hears the first paragraph almost immediately while the rest is fetched.
 
 Cancellation: a `_gen` integer is incremented on every `speak()` and `stop()`. Every async step checks `this._gen === gen` before continuing; stale in-flight fetches are silently discarded.
 
@@ -267,7 +269,7 @@ graph LR
 ```js
 {
   contents: [{ parts: [{ text: promptString }] }],
-  generationConfig: { temperature: 0.88, topP: 0.92, maxOutputTokens: 1024 },
+  generationConfig: { temperature: 0.88, topP: 0.92, maxOutputTokens: 8192, thinkingConfig: { thinkingBudget: 0 } },
   safetySettings: [ /* HARASSMENT, HATE_SPEECH, SEXUALLY_EXPLICIT, DANGEROUS_CONTENT — all BLOCK_MEDIUM_AND_ABOVE */ ]
 }
 ```

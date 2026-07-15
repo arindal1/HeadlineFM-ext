@@ -122,7 +122,7 @@ Google Gemini 2.5 Flash client.
 | `PERSONAS` | `object` | `{ female: PersonaConfig, male: PersonaConfig }` |
 | `generateNarration(newsText, apiKey, gender)` | `async fn` | Builds prompt, calls Gemini, returns narration string |
 
-**Generation config:** temperature `0.88`, topP `0.92`, maxOutputTokens `1024`.
+**Generation config:** temperature `0.88`, topP `0.92`, maxOutputTokens `8192`, `thinkingBudget: 0` (thinking disabled — prevents reasoning tokens from consuming the output budget, eliminating the ~1 000-token truncation on 2.5 Flash).
 
 **`buildPrompt(newsText, dateStr, persona)`** — internal; constructs the full LLM system + user prompt including persona description, delivery style, and strict output rules.
 
@@ -157,7 +157,7 @@ Voices are hard-coded — there is no user selection. This ensures consistent br
 - Response is base64 raw PCM: 16-bit signed little-endian · 24 kHz · mono
 - `_decodePCM(base64)` converts it to a float32 `AudioBuffer`
 - `_playBuffer(audioBuffer, gen)` plays it via a `BufferSourceNode`
-- For very long scripts, `_chunkText()` splits at paragraph boundaries and the chunks are **pipelined**: chunk N+1 is fetched while chunk N is playing, eliminating gaps
+- `_chunkText()` always splits on `\n\n` paragraph boundaries — **each paragraph is a separate TTS API call**. Oversized paragraphs fall back to sentence-level splitting (hard ceiling: 3 500 chars). Chunk N+1 is pre-fetched while chunk N is playing, so there are no audible gaps.
 - Cancellation token (`_gen`) ensures stop/restart never plays stale audio
 
 ---

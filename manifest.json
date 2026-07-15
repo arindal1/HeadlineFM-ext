@@ -2,8 +2,8 @@
     "manifest_version": 3,
     "name": "Headline FM",
     "short_name": "HLFM",
-    "version": "2.0.1",
-    "description": "Your daily news, narrated with personality. Stay informed, stay entertained. By @arindal1",
+    "version": "2.2.0",
+    "description": "Your daily news, narrated with personality. Stay informed, stay entertained.",
     "permissions": [
         "storage"
     ],
