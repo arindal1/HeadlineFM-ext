@@ -2,7 +2,7 @@
 
 ## What it is
 
-A **Manifest V3 Chrome extension** that fetches today's top news headlines, sends them to Google Gemini to produce an entertaining narration script, then reads it aloud via the browser's Web Speech API. A shared Node.js/MongoDB backend acts as a cross-user daily cache so Gemini is called at most **twice per day** (once per gender/persona).
+A **Manifest V3 Chrome extension** that fetches today's top news headlines, sends them to Google Gemini to produce an entertaining narration script, then reads it aloud via the **Gemini TTS API + Web Audio API**. A shared Node.js/MongoDB backend acts as a cross-user daily cache so Gemini is called at most **twice per day** (once per gender/persona).
 
 ---
 

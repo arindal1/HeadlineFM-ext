@@ -1,5 +1,5 @@
 /**
- * service-worker.js - HeadlineFM background service worker (MV3)
+ * service-worker.js — HeadlineFM background service worker (MV3)
  * Minimal: just keeps the extension alive and handles
  * the options page shortcut for the context menu.
  */

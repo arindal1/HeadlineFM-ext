@@ -12,12 +12,15 @@
  */
 
 const GEMINI_TTS_URL =
-  "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-tts-preview:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent";
 
 const PCM_SAMPLE_RATE = 24_000; // Hz
 
-/** Max chars per API call. A 700-word broadcast ≈ 4 200 chars, well under Gemini's 8 k-token limit. */
-const CHUNK_SIZE = 4_000;
+/**
+ * Max chars per TTS chunk — only used as a hard ceiling for oversized paragraphs.
+ * Normal paragraph-based splits are well under this limit.
+ */
+const MAX_CHUNK_CHARS = 3_500;
 
 /**
  * Fixed broadcast voices - chosen for quality and consistency.
@@ -84,7 +87,7 @@ export class TTSService {
 
     // Fire-and-forget - all errors surface via this.onError
     this._runChunks(
-      this._chunkText(text, CHUNK_SIZE),
+      this._chunkText(text, MAX_CHUNK_CHARS),
       voiceName,
       apiKey,
       gen,
@@ -282,23 +285,43 @@ export class TTSService {
     }
   }
 
-  /** Split at paragraph boundaries, then sentence endings, within maxLen. */
+  /**
+   * Split at paragraph boundaries (primary) then sentence endings (fallback).
+   * Each element becomes one Gemini TTS API call — played while the next is
+   * being fetched in parallel, eliminating audible gaps between paragraphs.
+   *
+   * @param {string} text
+   * @param {number} maxLen - hard ceiling per chunk (oversized paragraph fallback)
+   */
   _chunkText(text, maxLen) {
-    if (text.length <= maxLen) return [text];
+    // Split on blank lines (paragraph boundaries)
+    const paragraphs = text.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean);
+
+    // Single paragraph (or no double-newlines) that fits → return as-is
+    if (paragraphs.length === 1 && text.length <= maxLen) return [text];
 
     const chunks = [];
-    const paragraphs = text.split(/\n{2,}/);
-    let current = "";
 
     for (const para of paragraphs) {
-      if (current.length + para.length + 2 > maxLen && current) {
-        chunks.push(current.trim());
-        current = para;
+      if (para.length <= maxLen) {
+        // Paragraph fits within the limit — each paragraph is its own TTS chunk
+        chunks.push(para);
       } else {
-        current += (current ? "\n\n" : "") + para;
+        // Oversized paragraph — split at sentence boundaries
+        const sentences = para.match(/[^.!?]*[.!?]+\s*/g) ?? [para];
+        let current = "";
+        for (const sent of sentences) {
+          if (current.length + sent.length > maxLen && current) {
+            chunks.push(current.trim());
+            current = sent;
+          } else {
+            current += sent;
+          }
+        }
+        if (current.trim()) chunks.push(current.trim());
       }
     }
-    if (current.trim()) chunks.push(current.trim());
-    return chunks;
+
+    return chunks.length > 0 ? chunks : [text];
   }
 }

@@ -7,9 +7,7 @@
     <title>Headline FM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
-        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="popup.css" />
 </head>
 
@@ -31,8 +29,7 @@
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="3" />
-                        <path
-                            d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
                     </svg>
                 </button>
             </div>
@@ -57,10 +54,10 @@
         <section class="section" aria-labelledby="anchorLabel">
             <div class="section-label" id="anchorLabel">Anchor</div>
             <div class="voice-segment" role="radiogroup" aria-label="Voice gender">
-                <button type="button" class="voice-btn active" id="voiceFemale" data-gender="female" role="radio"
-                    aria-checked="true">Female</button>
-                <button type="button" class="voice-btn" id="voiceMale" data-gender="male" role="radio"
-                    aria-checked="false">Male</button>
+                <button type="button" class="voice-btn active" id="voiceFemale" data-gender="female"
+                    role="radio" aria-checked="true">Female</button>
+                <button type="button" class="voice-btn" id="voiceMale" data-gender="male"
+                    role="radio" aria-checked="false">Male</button>
             </div>
             <div class="persona-badge" id="personaBadge" aria-live="polite"></div>
         </section>
@@ -74,8 +71,7 @@
                     Choose your topics and tap <strong>Broadcast</strong> to start.
                 </div>
                 <div class="narration-body" id="narrationBody" style="display:none">
-                    <span class="spoken" id="spokenText"></span><span class="cursor"></span><span class="unspoken"
-                        id="unspokenText"></span>
+                    <span class="spoken" id="spokenText"></span><span class="cursor"></span><span class="unspoken" id="unspokenText"></span>
                 </div>
             </div>
 
@@ -93,13 +89,11 @@
                         <path d="M6 6h2v12H6zm3.5 6 8.5 6V6z" />
                     </svg>
                 </button>
-                <button type="button" class="ctrl-btn play-btn" id="playPauseBtn" title="Play / Pause" disabled
-                    aria-label="Play">
+                <button type="button" class="ctrl-btn play-btn" id="playPauseBtn" title="Play / Pause" disabled aria-label="Play">
                     <svg class="icon-play" width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M8 5v14l11-7z" />
                     </svg>
-                    <svg class="icon-pause" width="17" height="17" viewBox="0 0 24 24" fill="currentColor"
-                        style="display:none">
+                    <svg class="icon-pause" width="17" height="17" viewBox="0 0 24 24" fill="currentColor" style="display:none">
                         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
                     </svg>
                 </button>
@@ -130,5 +124,4 @@
     </div>
     <script type="module" src="popup.js"></script>
 </body>
-
 </html>

@@ -107,7 +107,11 @@ export async function generateNarration(newsText, apiKey, gender = "female") {
     generationConfig: {
       temperature: 0.88,
       topP: 0.92,
-      maxOutputTokens: 3072,
+      maxOutputTokens: 8192,
+      // Disable internal reasoning — not needed for creative narration and
+      // thinking tokens previously shared the output budget, causing ~1000-token
+      // truncation even when maxOutputTokens was set higher.
+      thinkingConfig: { thinkingBudget: 0 },
     },
     safetySettings: [
       {
@@ -133,6 +137,7 @@ export async function generateNarration(newsText, apiKey, gender = "female") {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(30_000),
   });
 
   if (!resp.ok) {
@@ -144,7 +149,12 @@ export async function generateNarration(newsText, apiKey, gender = "female") {
   const data = await resp.json();
 
   // Extract text from the first candidate
-  const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const candidate = data?.candidates?.[0];
+  const finishReason = candidate?.finishReason;
+  if (finishReason === "MAX_TOKENS") {
+    console.warn("[Gemini] Response hit MAX_TOKENS — output may be truncated.");
+  }
+  const text = candidate?.content?.parts?.[0]?.text;
   if (!text)
     throw new Error(
       "Gemini returned no content. Check your API key and quota.",
